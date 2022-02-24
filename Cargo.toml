@@ -1,0 +1,15 @@
+[package]
+name = "matex"
+version = "0.1.0"
+edition = "2021"
+description = "MaTeX a document scripting language"
+license = "MIT"
+documentation = "http://matex.mkproj.com"
+repository = "http://github.com/MKProj/MaTeX"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = "1.0.136"
+serde_derive = "1.0.136"
+structopt = "0.3.26"
+toml = "0.5.8"
