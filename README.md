@@ -20,21 +20,20 @@ author: Someone
 title: Some Title
 % \date{Date}
 date: Date
+% \usepackage{listings}
+import: listings 
 
 % \begin{document}
 document > begin
     % \maketitle
     maketitle;
+    % \input{anotherfile}
+    input: anotherfile
 % \end{document}
 document > end   
 ```
 
+> For inputs, make sure to put the name of the file not `name.matex` since it's already inferred. 
 - To create a new MaTeX project: `matex new <project_name>`
 - To build pdf from single file: `matex build <name>`
 - To compile MaTeX project: `matex compile`
-  
-## Currently Not Added 
-
-- Input (Will be added in `0.2.0`)
-- Comments in same line as other tokens 
-- Import keyword instead of `usepackage: package`

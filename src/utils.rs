@@ -48,6 +48,24 @@ impl Config {
     }
 }
 
+pub fn recurse_input(token: &Token) -> String {
+    let s = match get_input(token){
+        Some(a) => a,
+        None => return token.to_owned().to_latex()
+    };
+    let mut v = Vec::new();
+    for line in s.unwrap(){
+        let line = line.unwrap();
+        let token = match Token::get_token(line){
+            Ok(t) => t,
+            Err(m) => panic!("{}", m)
+        };
+        let s = recurse_input(&token);
+        v.push(s);
+    }
+    v.join("\n")
+}
+
 pub fn build(name: &str, compiler: &Option<String>) -> Result<(), Error>{
     let compiler = match compiler {
         Some(c) => c,
@@ -61,7 +79,8 @@ pub fn build(name: &str, compiler: &Option<String>) -> Result<(), Error>{
             Ok(t) => t,
             Err(m) => panic!("{}", m)
         };
-        latex.push(token.to_latex());
+        let s = recurse_input(&token);
+        latex.push(s);
     }
     let latex_str = latex.join("\n");
     let latex_path = format!("{}.tex", &name);

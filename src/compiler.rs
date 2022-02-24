@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{File, read_to_string};
 use std::io::{self, BufRead};
 use std::path::{Path, PathBuf};
 
@@ -51,6 +51,8 @@ impl Token{
     }
 }
 
+pub type LineResult = io::Result<io::Lines<io::BufReader<File>>>;
+
 #[derive(Debug, Clone)]
 pub struct Element(String, String);
 #[derive(Debug, Clone)]
@@ -62,13 +64,25 @@ pub struct EndEnv(String);
 #[derive(Debug, Clone)]
 pub struct Comment(String);
 
-
+pub fn get_input(t:&Token) -> Option<LineResult>{
+    let mut result = None;
+    match t{
+        Token::Element(e) => {
+            if &e.0 == "input"{
+                let path = format!("{}.matex", &e.1);
+                result = Some(read_lines(&path));
+            }
+        }
+        _ => result = None
+    }
+    result
+}
 
 fn remove_whitespace(s: &str) -> String {
     s.chars().filter(|c| !c.is_whitespace()).collect()
 }
 
-pub fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+pub fn read_lines<P>(filename: P) -> LineResult
 where P: AsRef<Path>, {
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
@@ -79,7 +93,11 @@ pub trait Latex{
 // Implementations of Latex
 impl Latex for Element{
     fn to_latex(&self) -> String {
-        let name = &self.0;
+        let name = if &self.0 == "import"{
+            "usepackage"
+        } else {
+            &self.0
+        };
         let value = &self.1;
         format!("\\{name}{{{value}}}")
     }

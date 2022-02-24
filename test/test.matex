@@ -1,0 +1,12 @@
+documentclass: article
+author: me
+title: a title
+date: a date
+input: packages
+
+document > begin
+    maketitle; % maketitle
+    input: sometext
+document > end
+
+

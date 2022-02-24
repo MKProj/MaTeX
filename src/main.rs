@@ -1,5 +1,6 @@
 mod utils;
 mod compiler;
+use compiler::*;
 use utils::*;
 use std::io::Write;
 use structopt::StructOpt;
